@@ -13,6 +13,7 @@ jobs:
         NO_PUSH: true
         MYBINDERORG_TAG: ${{ github.event.pull_request.head.ref }}
         IMAGE_NAME: mitchellacoustics/soundscapy-binder
+        FORCE_REPO2DOCKER_VERSION: repo2docker=2026.04.0
 
     - name: comment on PR with Binder link
       uses: actions/github-script@v1
