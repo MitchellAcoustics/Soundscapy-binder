@@ -1,14 +1,14 @@
 name: Binder
 on:
   pull_request:
-    types: [opened, reopened]
+    # types: [opened, reopened]
 
 jobs:
   Create-Binder-Badge:
     runs-on: ubuntu-latest
     steps:
     - name: cache binder build on mybinder.org
-      uses: jupyterhub/repo2docker-action@master
+      uses: jupyterhub/repo2docker-action@0.2
       with:
         NO_PUSH: true
         MYBINDERORG_TAG: ${{ github.event.pull_request.head.ref }}
