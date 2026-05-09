@@ -1,31 +1,15 @@
-name: Binder
-on:
-  pull_request:
-    # types: [opened, reopened]
-
+name: Build Notebook Container
+on: [push] # You may want to trigger this Action on other things than a push.
 jobs:
-  Create-Binder-Badge:
+  build:
     runs-on: ubuntu-latest
     steps:
-    - name: cache binder build on mybinder.org
+
+    - name: checkout files in repo
+      uses: actions/checkout@main
+
+    - name: update jupyter dependencies with repo2docker
       uses: jupyterhub/repo2docker-action@0.2
       with:
-        NO_PUSH: true
-        MYBINDERORG_TAG: ${{ github.event.pull_request.head.ref }}
-        IMAGE_NAME: mitchellacoustics/soundscapy-binder
-        FORCE_REPO2DOCKER_VERSION: repo2docker=2026.04.0
-
-    - name: comment on PR with Binder link
-      uses: actions/github-script@v1
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          var BRANCH_NAME = process.env.BRANCH_NAME;
-          github.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: `[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/${context.repo.owner}/${context.repo.repo}/${BRANCH_NAME}) :point_left: Launch a binder notebook on this branch`
-          })
-      env:
-        BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
